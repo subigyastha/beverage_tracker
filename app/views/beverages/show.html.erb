@@ -1,0 +1,76 @@
+<!-- app/views/beverages/show.html.erb -->
+<div class="container mx-auto p-4">
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Beverage Details</h1>
+      <div>
+        <%= link_to 'Edit', edit_beverage_path(@beverage), class: 'bg-yellow-500 text-white px-4 py-2 rounded mr-2' %>
+        <%= link_to 'Back to List', beverages_path, class: 'bg-blue-500 text-white px-4 py-2 rounded' %>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <h2 class="font-bold mb-2">Beverage Information</h2>
+        <p><strong>Date:</strong> <%= @beverage.date %></p>
+        <p><strong>Time:</strong> <%= @beverage.consumption_time&.strftime("%I:%M %p") %></p>
+        <p><strong>Category:</strong> <%= @beverage.category %></p>
+        <p><strong>Subcategory:</strong> <%= @beverage.subcategory %></p>
+        <p><strong>Quantity:</strong> <%= "#{@beverage.quantity} #{@beverage.unit}" %></p>
+        <p><strong>Temperature:</strong> <%= @beverage.temperature %></p>
+        <p><strong>Estimated Calories:</strong> <%= @beverage.calories || 0 %></p>
+      </div>
+
+      <div>
+        <h2 class="font-bold mb-2">Additions</h2>
+        <% if @beverage.additions.any? %>
+          <ul class="list-disc pl-5">
+            <% @beverage.additions.each do |addition| %>
+              <li><%= addition.name %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p>No additions recorded</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h2 class="font-bold mb-2">Symptoms</h2>
+      <% if @beverage.symptoms.any? %>
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-2 border">Symptom</th>
+              <th class="p-2 border">Severity</th>
+              <th class="p-2 border">Timing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @beverage.symptoms.each do |symptom| %>
+              <tr>
+                <td class="p-2 border"><%= symptom.name %></td>
+                <td class="p-2 border"><%= symptom.severity %></td>
+                <td class="p-2 border"><%= symptom.timing %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No symptoms recorded</p>
+      <% end %>
+    </div>
+
+    <% if @beverage.note.present? %>
+      <div class="mt-4">
+        <h2 class="font-bold mb-2">Additional Notes</h2>
+        <p class="bg-gray-100 p-3 rounded"><%= @beverage.note.content %></p>
+      </div>
+    <% end %>
+
+  <div class="bg-yellow-100 p-3 rounded mt-4">
+    <p class="font-semibold text-yellow-700">Tips and Recommendations:</p>
+    <p><%= @beverage.get_personalized_tip %></p>
+  </div>
+  </div>
+</div>

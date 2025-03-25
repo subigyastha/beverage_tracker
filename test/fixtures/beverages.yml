@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2025-03-25
+  consumption_time: 2025-03-25 03:13:39
+  category: MyString
+  subcategory: MyString
+  quantity: 1.5
+  unit: MyString
+  temperature: MyString
+  photo: MyString
+  calories: 1
+
+two:
+  date: 2025-03-25
+  consumption_time: 2025-03-25 03:13:39
+  category: MyString
+  subcategory: MyString
+  quantity: 1.5
+  unit: MyString
+  temperature: MyString
+  photo: MyString
+  calories: 1
