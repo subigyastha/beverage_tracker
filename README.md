@@ -1,24 +1,23 @@
-# README
+# Beverage Tracker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Overview
+A Ruby on Rails application for tracking beverage consumption, symptoms, and personal health insights.
 
-Things you may want to cover:
+## Features
+- Track beverage consumption
+- Log symptoms
+- Personalized health tips
+- Comprehensive beverage and symptom categorization
 
-* Ruby version
+## Setup
+1. Clone the repository
+2. Run `bundle install`
+3. Run `rails db:migrate`
+4. Start the server with `rails server`
 
-* System dependencies
+## Technologies
+- Ruby on Rails
+- SQLite (development)
+- Custom health tracking models
 
-* Configuration
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
