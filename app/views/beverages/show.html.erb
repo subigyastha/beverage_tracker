@@ -1,76 +1,88 @@
-<!-- app/views/beverages/show.html.erb -->
-<div class="container mx-auto p-4">
-  <div class="bg-white shadow-md rounded-lg p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">Beverage Details</h1>
-      <div>
-        <%= link_to 'Edit', edit_beverage_path(@beverage), class: 'bg-yellow-500 text-white px-4 py-2 rounded mr-2' %>
-        <%= link_to 'Back to List', beverages_path, class: 'bg-blue-500 text-white px-4 py-2 rounded' %>
+<div class="container mx-auto px-4 py-6 sm:py-8 flex justify-center">
+  <div class="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6 sm:p-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Beverage Details</h1>
+      <div class="mt-4 sm:mt-0 flex space-x-3">
+        <%= link_to 'Edit', edit_beverage_path(@beverage), class: 'bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-md shadow-sm transition duration-200' %>
+        <%= link_to 'Back to List', beverages_path, class: 'bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm transition duration-200' %>
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-4">
-      <div>
-        <h2 class="font-bold mb-2">Beverage Information</h2>
-        <p><strong>Date:</strong> <%= @beverage.date %></p>
-        <p><strong>Time:</strong> <%= @beverage.consumption_time&.strftime("%I:%M %p") %></p>
-        <p><strong>Category:</strong> <%= @beverage.category %></p>
-        <p><strong>Subcategory:</strong> <%= @beverage.subcategory %></p>
-        <p><strong>Quantity:</strong> <%= "#{@beverage.quantity} #{@beverage.unit}" %></p>
-        <p><strong>Temperature:</strong> <%= @beverage.temperature %></p>
-        <p><strong>Estimated Calories:</strong> <%= @beverage.calories || 0 %></p>
+    <!-- Beverage Information Card -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Left: Beverage Info -->
+      <div class="space-y-4">
+        <h2 class="text-lg font-semibold text-gray-800 text-center">Beverage Information</h2>
+        <div class="bg-gray-50 p-4 rounded-md shadow-sm text-gray-700">
+          <p class="text-center"><strong>Date:</strong> <%= @beverage.date %></p>
+          <p class="text-center"><strong>Time:</strong> <%= @beverage.consumption_time&.strftime("%I:%M %p") || "N/A" %></p>
+          <p class="text-center"><strong>Category:</strong> <%= @beverage.category || "N/A" %></p>
+          <p class="text-center"><strong>Subcategory:</strong> <%= @beverage.subcategory || "N/A" %></p>
+          <p class="text-center"><strong>Quantity:</strong> <%= @beverage.unit.present? ? "#{@beverage.quantity} #{@beverage.unit}" : "N/A" %></p>
+          <p class="text-center"><strong>Temperature:</strong> <%= @beverage.temperature || "N/A" %></p>
+          <p class="text-center"><strong>Estimated Calories:</strong> <%= @beverage.calories || 0 %></p>
+        </div>
       </div>
 
-      <div>
-        <h2 class="font-bold mb-2">Additions</h2>
-        <% if @beverage.additions.any? %>
-          <ul class="list-disc pl-5">
-            <% @beverage.additions.each do |addition| %>
-              <li><%= addition.name %></li>
-            <% end %>
-          </ul>
-        <% else %>
-          <p>No additions recorded</p>
-        <% end %>
+      <!-- Right: Additions -->
+      <div class="space-y-4">
+        <h2 class="text-lg font-semibold text-gray-800 text-center">Additions</h2>
+        <div class="bg-gray-50 p-4 rounded-md shadow-sm text-gray-700">
+          <% if @beverage.additions.any? %>
+            <ul class="list-disc pl-5 mx-auto max-w-xs">
+              <% @beverage.additions.each do |addition| %>
+                <li class="text-center"><%= addition.name %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-center text-gray-600 italic">No additions recorded</p>
+          <% end %>
+        </div>
       </div>
     </div>
 
-    <div class="mt-4">
-      <h2 class="font-bold mb-2">Symptoms</h2>
+    <!-- Symptoms Section -->
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold text-gray-800 text-center mb-4">Symptoms</h2>
       <% if @beverage.symptoms.any? %>
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="p-2 border">Symptom</th>
-              <th class="p-2 border">Severity</th>
-              <th class="p-2 border">Timing</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @beverage.symptoms.each do |symptom| %>
-              <tr>
-                <td class="p-2 border"><%= symptom.name %></td>
-                <td class="p-2 border"><%= symptom.severity %></td>
-                <td class="p-2 border"><%= symptom.timing %></td>
+        <div class="overflow-x-auto">
+          <table class="w-full max-w-lg mx-auto border-collapse bg-gray-50 rounded-md shadow-sm">
+            <thead>
+              <tr class="bg-gray-200 text-gray-800">
+                <th class="p-3 text-center">Symptom</th>
+                <th class="p-3 text-center">Severity</th>
+                <th class="p-3 text-center">Timing</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @beverage.symptoms.each do |symptom| %>
+                <tr class="border-b hover:bg-gray-100">
+                  <td class="p-3 text-center"><%= symptom.name %></td>
+                  <td class="p-3 text-center"><%= symptom.severity %></td>
+                  <td class="p-3 text-center"><%= symptom.timing %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       <% else %>
-        <p>No symptoms recorded</p>
+        <p class="text-center text-gray-600 italic">No symptoms recorded</p>
       <% end %>
     </div>
 
+    <!-- Notes Section -->
     <% if @beverage.note.present? %>
-      <div class="mt-4">
-        <h2 class="font-bold mb-2">Additional Notes</h2>
-        <p class="bg-gray-100 p-3 rounded"><%= @beverage.note.content %></p>
+      <div class="mt-8">
+        <h2 class="text-lg font-semibold text-gray-800 text-center mb-4">Additional Notes</h2>
+        <p class="bg-gray-100 p-4 rounded-md shadow-sm text-gray-700 text-center max-w-lg mx-auto"><%= @beverage.note.content %></p>
       </div>
     <% end %>
 
-  <div class="bg-yellow-100 p-3 rounded mt-4">
-    <p class="font-semibold text-yellow-700">Tips and Recommendations:</p>
-    <p><%= @beverage.get_personalized_tip %></p>
-  </div>
+    <!-- Tips Section -->
+    <div class="mt-8 bg-amber-50 p-4 rounded-md shadow-sm text-center max-w-lg mx-auto">
+      <p class="font-semibold text-amber-800">Tips and Recommendations:</p>
+      <p class="text-amber-700"><%= @beverage.get_personalized_tip %></p>
+    </div>
   </div>
 </div>

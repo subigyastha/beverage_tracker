@@ -1,62 +1,145 @@
-<div class="container mx-auto p-4">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold text-gray-800">My Beverage Tracker</h1>
-    <%= link_to 'Track New Beverage', new_beverage_path, class: 'bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded' %>
+<div class="container mx-auto px-4 py-6 sm:py-8">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-indigo-600">My Beverage Tracker</h1>
+    <%= link_to 'Track New Beverage', new_beverage_path, class: 'mt-4 sm:mt-0 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200' %>
   </div>
 
+  <!-- Empty State -->
   <% if @beverages.empty? %>
-    <div class="bg-blue-100 border border-blue-300 text-blue-700 p-4 rounded">
+    <div class="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-lg shadow-sm">
       <p>You haven't tracked any beverages yet. Start tracking to monitor your intake!</p>
     </div>
   <% else %>
-    <table class="w-full border-collapse border border-gray-300 rounded overflow-hidden shadow-md">
-      <thead>
-        <tr class="bg-gray-100 text-gray-700">
-          <th class="py-2 px-4 border">Date</th>
-          <th class="py-2 px-4 border">Time</th>
-          <th class="py-2 px-4 border">Beverage</th>
-          <th class="py-2 px-4 border">Quantity</th>
-          <th class="py-2 px-4 border text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @beverages.each do |beverage| %>
-          <tr class="hover:bg-gray-50">
-            <td class="py-2 px-4 border"><%= beverage.date %></td>
-            <td class="py-2 px-4 border"><%= beverage.consumption_time&.strftime("%I:%M %p") %></td>
-            <td class="py-2 px-4 border">
-              <% if beverage.category.present? %>
-                <%= beverage.category %>
-                <% if beverage.subcategory.present? %>
-                  - <%= beverage.subcategory %>
-                <% end %>
-              <% else %>
-                N/A
-              <% end %>
-            </td>
-            <td class="py-2 px-4 border">
-              <% if beverage.unit.present? %>
-                <%= "#{beverage.quantity} #{beverage.unit}" %>
-              <% else %>
-                N/A
-              <% end %>
-            </td>
-            <td class="py-2 px-4 border text-center">
-              <%= link_to 'View', beverage, class: 'text-blue-500 hover:underline mr-2' %>
-              <%= link_to 'Edit', edit_beverage_path(beverage), class: 'text-yellow-500 hover:underline mr-2' %>
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @beverages.each do |beverage| %>
+        <div class="bg-white shadow-lg rounded-xl p-4 sm:p-6 cursor-pointer hover:shadow-xl transition duration-200 beverage-card" data-id="<%= beverage.id %>">
+          <!-- Card Header (Always Visible) -->
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-sm text-gray-500"><%= beverage.consumption_time&.strftime("%I:%M %p") || "N/A" %></p>
+              <h2 class="text-lg font-semibold text-gray-800"><%= beverage.subcategory || "Unnamed Drink" %></h2>
+              <p class="text-sm text-gray-600"><%= beverage.category || "N/A" %></p>
+            </div>
+          </div>
 
-              <%= button_to 'Delete',
-                beverage_path(beverage),
-                method: :delete,
-                data: {
-                  turbo_method: :delete,
-                  turbo_confirm: 'Are you sure you want to delete this beverage?'
-                },
-                class: 'inline-block bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded' %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+          <!-- Card Footer (Always Visible) -->
+          <div class="mt-4 flex justify-between items-center text-sm text-gray-700">
+            <div>
+              <p><strong>Calories:</strong> <%= beverage.calories || 0 %></p>
+              <p><strong>Quantity:</strong> <%= beverage.unit.present? ? "#{beverage.quantity} #{beverage.unit}" : "N/A" %></p>
+              <p><strong>Symptoms:</strong> <%= beverage.symptoms.any? ? beverage.symptoms.count : "None" %></p>
+              <p><strong>Temperature:</strong> <%= beverage.temperature || "N/A" %></p>
+            </div>
+          </div>
+
+          <!-- Expanded Content (Hidden by Default) -->
+          <div class="hidden mt-4 border-t pt-4 beverage-details" data-id="<%= beverage.id %>">
+            <!-- Additional Details -->
+            <div class="space-y-4">
+              <h3 class="text-md font-semibold text-gray-800">More Details</h3>
+              <p><strong>Date:</strong> <%= beverage.date %></p>
+
+              <!-- Additions -->
+              <div>
+                <p class="font-semibold">Additions:</p>
+                <% if beverage.additions.any? %>
+                  <ul class="list-disc pl-5 text-gray-700">
+                    <% beverage.additions.each do |addition| %>
+                      <li><%= addition.name %></li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <p class="text-gray-600 italic">No additions recorded</p>
+                <% end %>
+              </div>
+
+              <!-- Symptoms -->
+              <div>
+                <p class="font-semibold">Symptoms:</p>
+                <% if beverage.symptoms.any? %>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border-collapse bg-gray-50 rounded-lg shadow-sm">
+                      <thead>
+                        <tr class="bg-indigo-100 text-indigo-800">
+                          <th class="p-2 text-left">Symptom</th>
+                          <th class="p-2 text-left">Severity</th>
+                          <th class="p-2 text-left">Timing</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% beverage.symptoms.each do |symptom| %>
+                          <tr class="border-b hover:bg-gray-100">
+                            <td class="p-2"><%= symptom.name %></td>
+                            <td class="p-2"><%= symptom.severity %></td>
+                            <td class="p-2"><%= symptom.timing %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                <% else %>
+                  <p class="text-gray-600 italic">No symptoms recorded</p>
+                <% end %>
+              </div>
+
+              <!-- Notes -->
+              <% if beverage.note.present? %>
+                <div>
+                  <p class="font-semibold">Notes:</p>
+                  <p class="bg-gray-100 p-3 rounded-lg text-gray-700"><%= beverage.note.content %></p>
+                </div>
+              <% end %>
+
+              <!-- Tips -->
+              <div class="bg-yellow-50 p-3 rounded-lg">
+                <p class="font-semibold text-yellow-800">Tips:</p>
+                <p class="text-yellow-700"><%= beverage.get_personalized_tip %></p>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex space-x-3">
+              <%= link_to beverage_path(beverage), class: "flex items-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition duration-200" do %>
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-8.5 9a9.5 9.5 0 1117 0H4.5z"></path>
+                </svg>
+                View
+              <% end %>
+              <%= link_to edit_beverage_path(beverage), class: "flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-2 rounded-lg transition duration-200" do %>
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                Edit
+              <% end %>
+              <%= button_to beverage_path(beverage), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "flex items-center bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition duration-200" do %>
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4M9 7v12m6-12v12"></path>
+                </svg>
+                Delete
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 </div>
+
+<!-- JavaScript for Card Expansion -->
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.beverage-card');
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Prevent clicking buttons from toggling
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) return;
+        
+        const id = card.getAttribute('data-id');
+        const details = document.querySelector(`.beverage-details[data-id="${id}"]`);
+        details.classList.toggle('hidden');
+      });
+    });
+  });
+<% end %>

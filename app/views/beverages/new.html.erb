@@ -1,14 +1,11 @@
-<h1>Beverages#new</h1>
-<p>Find me in app/views/beverages/new.html.erb</p>
-<!-- app/views/beverages/new.html.erb -->
-<div class="container mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Track a New Beverage</h1>
-  
-  <%= form_with(model: @beverage, local: true, class: 'space-y-4') do |form| %>
+<div class="container mx-auto px-4 py-6 sm:py-8 max-w-3xl">
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">Track a New Beverage</h1>
+
+  <%= form_with(model: @beverage, local: true, class: 'space-y-6') do |form| %>
     <% if @beverage.errors.any? %>
-      <div class="bg-red-100 p-4 rounded">
-        <h2 class="text-red-800"><%= pluralize(@beverage.errors.count, "error") %> prohibited this beverage from being saved:</h2>
-        <ul class="list-disc pl-5">
+      <div class="bg-red-50 p-4 rounded-lg shadow-sm text-red-800">
+        <h2 class="font-semibold"><%= pluralize(@beverage.errors.count, "error") %> prohibited this beverage from being saved:</h2>
+        <ul class="list-disc pl-5 mt-2">
           <% @beverage.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
@@ -16,164 +13,130 @@
       </div>
     <% end %>
 
-    <div class="grid grid-cols-2 gap-4">
+    <!-- Date and Time -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
-        <%= form.label :date, class: 'block mb-2' %>
-        <%= form.date_field :date, class: 'w-full p-2 border rounded' %>
+        <%= form.label :date, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.date_field :date, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
       </div>
-
       <div>
-        <%= form.label :consumption_time, 'Time', class: 'block mb-2' %>
-        <%= form.time_field :consumption_time, class: 'w-full p-2 border rounded' %>
+        <%= form.label :consumption_time, 'Time', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.time_field :consumption_time, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
       </div>
     </div>
 
-    <div>
-      <%= form.label :category, class: 'block mb-2' %>
-      <%= form.select :category, 
-          Beverage::CATEGORIES, 
-          { prompt: 'Select Category' }, 
-          { 
-            class: 'w-full p-2 border rounded', 
-            id: 'beverage_category' 
-          } %>
-      
-      <div id="custom-category-container" class="mt-2" style="display: none;">
-        <%= form.label :custom_category, 'Custom Category', class: 'block mb-2' %>
-        <%= form.text_field :custom_category, 
-            class: 'w-full p-2 border rounded', 
-            placeholder: 'Enter a custom category' %>
-      </div>
-    </div>
-
-    <div>
-      <%= form.label :subcategory, class: 'block mb-2' %>
-      <%= form.select :subcategory, 
-          [], 
-          { prompt: 'Select Subcategory' }, 
-          { 
-            class: 'w-full p-2 border rounded', 
-            id: 'beverage_subcategory' 
-          } %>
-      
-      <div id="custom-subcategory-container" class="mt-2" style="display: none;">
-        <%= form.label :custom_subcategory, 'Custom Subcategory', class: 'block mb-2' %>
-        <%= form.text_field :custom_subcategory, 
-            class: 'w-full p-2 border rounded', 
-            placeholder: 'Enter a custom subcategory' %>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
+    <!-- Category and Subcategory -->
+    <div class="space-y-4">
       <div>
-        <%= form.label :quantity, class: 'block mb-2' %>
-        <%= form.number_field :quantity, step: 0.1, class: 'w-full p-2 border rounded' %>
+        <%= form.label :category, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.select :category, Beverage::CATEGORIES, { prompt: 'Select Category' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', id: 'beverage_category' %>
+        <div id="custom-category-container" class="mt-2 hidden">
+          <%= form.label :custom_category, 'Custom Category', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+          <%= form.text_field :custom_category, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', placeholder: 'Enter a custom category' %>
+        </div>
       </div>
-
       <div>
-        <%= form.label :unit, class: 'block mb-2' %>
-        <%= form.select :unit, 
-            Beverage::UNITS, 
-            { prompt: 'Select Unit' }, 
-            { 
-              class: 'w-full p-2 border rounded', 
-              id: 'beverage_unit' 
-            } %>
-        
-        <div id="custom-unit-container" class="mt-2" style="display: none;">
-          <%= form.label :custom_unit, 'Custom Unit', class: 'block mb-2' %>
-          <%= form.text_field :custom_unit, 
-              class: 'w-full p-2 border rounded', 
-              placeholder: 'Enter a custom unit' %>
+        <%= form.label :subcategory, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.select :subcategory, [], { prompt: 'Select Subcategory' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', id: 'beverage_subcategory' %>
+        <div id="custom-subcategory-container" class="mt-2 hidden">
+          <%= form.label :custom_subcategory, 'Custom Subcategory', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+          <%= form.text_field :custom_subcategory, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', placeholder: 'Enter a custom subcategory' %>
         </div>
       </div>
     </div>
 
-    <div>
-      <%= form.label :temperature, class: 'block mb-2' %>
-      <div class="flex items-center space-x-4">
-        <%= form.range_field :temperature, 
-            min: 0, 
-            max: 100, 
-            step: 1, 
-            class: 'w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer', 
-            id: 'temperature-slider' %>
-        <span id="temperature-display" class="text-gray-700 w-32 text-center">
-          Room Temperature (20°C / 68°F)
-        </span>
-        <%= form.hidden_field :temperature, 
-            id: 'temperature-hidden', 
-            value: 'room_temp' %>
+    <!-- Quantity and Unit -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :quantity, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.number_field :quantity, step: 0.1, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
+      </div>
+      <div>
+        <%= form.label :unit, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= form.select :unit, Beverage::UNITS, { prompt: 'Select Unit' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', id: 'beverage_unit' %>
+        <div id="custom-unit-container" class="mt-2 hidden">
+          <%= form.label :custom_unit, 'Custom Unit', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+          <%= form.text_field :custom_unit, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500', placeholder: 'Enter a custom unit' %>
+        </div>
       </div>
     </div>
 
-    
+    <!-- Temperature -->
     <div>
-      <h3 class="font-bold mb-2">Additions</h3>
-      <div id="additions">
+      <%= form.label :temperature, class: 'block text-sm font-medium text-gray-700 mb-1' %>
+      <div class="flex flex-col space-y-2">
+        <input type="range" name="beverage[temperature]" id="temperature-slider" min="0" max="100" step="1" class="w-full h-2 bg-gradient-to-r from-blue-200 via-green-300 to-red-300 rounded-lg appearance-none cursor-pointer" value="40">
+        <div class="flex justify-between text-xs text-gray-500">
+          <span>Ice Cold</span><span>Chilled</span><span>Cool</span><span>Room Temp</span><span>Warm</span><span>Hot</span><span>Boiling</span>
+        </div>
+        <span id="temperature-display" class="text-gray-700 text-center p-2 rounded-md bg-green-300">Room Temperature (20°C / 68°F)</span>
+        <%= form.hidden_field :temperature, id: 'temperature-hidden', value: 'room_temp' %>
+      </div>
+    </div>
+
+    <!-- Additions -->
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Additions</h3>
+      <div id="additions" class="space-y-4">
         <%= form.fields_for :additions do |addition_form| %>
-          <div class="flex items-center space-x-2 mb-2">
-            <%= addition_form.select :name, 
-                Addition::COMMON_ADDITIONS, 
-                { include_blank: 'Select Addition' }, 
-                { class: 'w-full p-2 border rounded' } %>
-            <%= addition_form.check_box :_destroy, class: 'mr-2' %>
-            <%= addition_form.label :_destroy, 'Remove', class: 'text-red-500' %>
+          <div class="addition-entry flex items-center space-x-2">
+            <%= addition_form.select :name, Addition::COMMON_ADDITIONS, { include_blank: 'Select Addition' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
+            <%= addition_form.check_box :_destroy, class: 'hidden remove-checkbox', id: "remove-addition-#{addition_form.object_id}" %>
+            <%= addition_form.label :_destroy, 'Remove', class: 'text-red-500 cursor-pointer hover:text-red-700 remove-label', for: "remove-addition-#{addition_form.object_id}" %>
           </div>
         <% end %>
       </div>
-      <button type="button" id="add-addition" class="bg-blue-500 text-white p-2 rounded">
-        Add Another Addition
-      </button>
+      <button type="button" id="add-addition" class="mt-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md shadow-sm transition duration-200">Add Another Addition</button>
     </div>
 
+    <!-- Symptoms -->
     <div>
-      <h3 class="font-bold mb-2">Symptoms</h3>
-      <%= form.fields_for :symptoms do |symptom_form| %>
-        <div class="space-y-2">
-          <div class="flex items-center">
-            <%= symptom_form.check_box :occurred, class: 'mr-2' %>
-            <%= symptom_form.label :occurred, 'Symptoms Occurred?' %>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Symptoms</h3>
+      <div id="symptoms" class="space-y-4">
+        <%= form.fields_for :symptoms do |symptom_form| %>
+          <div class="symptom-entry bg-gray-50 p-4 rounded-md shadow-sm space-y-2">
+            <div class="flex items-center">
+              <%= symptom_form.check_box :occurred, class: 'h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500' %>
+              <%= symptom_form.label :occurred, 'Symptoms Occurred?', class: 'ml-2 text-sm text-gray-700' %>
+            </div>
+            <%= symptom_form.select :name, Symptom::COMMON_SYMPTOMS, { include_blank: 'Select Symptom' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
+            <%= symptom_form.select :severity, ['Mild', 'Moderate', 'Severe'], { include_blank: 'Severity' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
+            <%= symptom_form.select :timing, ['Immediately', 'Within 20–30 minutes', '2–5 hours', '5+ hours later'], { include_blank: 'Timing of Symptoms' }, class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500' %>
+            <%= symptom_form.check_box :_destroy, class: 'hidden remove-checkbox', id: "remove-symptom-#{symptom_form.object_id}" %>
+            <%= symptom_form.label :_destroy, 'Remove', class: 'text-red-500 cursor-pointer hover:text-red-700 remove-label', for: "remove-symptom-#{symptom_form.object_id}" %>
           </div>
-
-          <%= symptom_form.select :name, 
-              Symptom::COMMON_SYMPTOMS, 
-              { include_blank: 'Select Symptom' }, 
-              { class: 'w-full p-2 border rounded mb-2' } %>
-
-          <%= symptom_form.select :severity, 
-              ['Mild', 'Moderate', 'Severe'], 
-              { include_blank: 'Severity' }, 
-              { class: 'w-full p-2 border rounded mb-2' } %>
-
-          <%= symptom_form.select :timing, 
-              [
-                'Immediately', 
-                'Within 20–30 minutes', 
-                '2–5 hours', 
-                '5+ hours later'
-              ], 
-              { include_blank: 'Timing of Symptoms' }, 
-              { class: 'w-full p-2 border rounded' } %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
+      <button type="button" id="add-symptom" class="mt-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md shadow-sm transition duration-200">Add Another Symptom</button>
     </div>
 
+    <!-- Notes -->
     <div>
       <%= form.fields_for :note do |note_form| %>
-        <%= note_form.label :content, 'Additional Notes', class: 'block mb-2' %>
-        <%= note_form.text_area :content, 
-            placeholder: 'Any observations about the drink or symptoms?', 
-            class: 'w-full p-2 border rounded h-24' %>
+        <%= note_form.label :content, 'Additional Notes', class: 'block text-sm font-medium text-gray-700 mb-1' %>
+        <%= note_form.text_area :content, placeholder: 'Any observations about the drink or symptoms?', class: 'w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 h-24' %>
       <% end %>
     </div>
 
-    <%= form.submit 'Track Beverage', class: 'bg-green-500 text-white p-2 rounded w-full' %>
+    <!-- Submit -->
+    <%= form.submit 'Track Beverage', class: 'w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-md shadow-sm transition duration-200' %>
   <% end %>
 </div>
 
-<script>
+<!-- Inline CSS to Fix Text Size Adjust -->
+<style>
+  html {
+    -webkit-text-size-adjust: 100%; /* Fallback for older browsers */
+    text-size-adjust: 100%; /* Supported by Chrome 54+, Edge 79+, etc. */
+  }
+</style>
+
+<!-- JavaScript with Debugging -->
+<%= javascript_tag do %>
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded'); // Debug: Check if script runs
+
+    // Temperature Slider
     const temperatureSlider = document.getElementById('temperature-slider');
     const temperatureDisplay = document.getElementById('temperature-display');
     const temperatureHidden = document.getElementById('temperature-hidden');
@@ -188,122 +151,154 @@
       { min: 81, max: 100, label: 'Boiling (100°C / 212°F)', value: 'boiling', color: 'bg-red-300' }
     ];
 
-    // Create slider labels container
-    const sliderLabelsContainer = document.createElement('div');
-    sliderLabelsContainer.className = 'flex justify-between text-xs text-gray-500 mb-2';
-    
-    temperatureRanges.forEach(range => {
-      const label = document.createElement('span');
-      label.textContent = range.label.split('(')[0].trim();
-      label.className = 'w-1/7 text-center';
-      sliderLabelsContainer.appendChild(label);
-    });
-
-    // Insert labels before the slider
-    temperatureSlider.parentNode.insertBefore(sliderLabelsContainer, temperatureSlider);
-
     function updateTemperatureDisplay() {
       const sliderValue = parseInt(temperatureSlider.value);
-      
-      const selectedRange = temperatureRanges.find(range => 
-        sliderValue >= range.min && sliderValue <= range.max
-      );
-
+      const selectedRange = temperatureRanges.find(range => sliderValue >= range.min && sliderValue <= range.max);
       if (selectedRange) {
-        // Update display text
         temperatureDisplay.textContent = selectedRange.label;
         temperatureHidden.value = selectedRange.value;
-
-        // Update background color of display
-        temperatureDisplay.className = `text-gray-700 w-64 text-center p-2 rounded ${selectedRange.color}`;
+        temperatureDisplay.className = `text-gray-700 text-center p-2 rounded-md ${selectedRange.color}`;
       }
     }
 
-    // Style the slider
-    temperatureSlider.className = 'w-full h-2 bg-gradient-to-r from-blue-200 via-green-300 to-red-300 rounded-lg appearance-none cursor-pointer';
-    
-    temperatureSlider.addEventListener('input', updateTemperatureDisplay);
-    
-    // Set initial display
-    updateTemperatureDisplay();
+    if (temperatureSlider) {
+      temperatureSlider.addEventListener('input', updateTemperatureDisplay);
+      updateTemperatureDisplay();
+    } else {
+      console.error('Temperature slider not found');
+    }
 
-   
-    // Category, Subcategory, and Unit Dynamic Handling
+    // Category, Subcategory, Unit Handlers
     const categorySelect = document.getElementById('beverage_category');
     const subcategorySelect = document.getElementById('beverage_subcategory');
     const unitSelect = document.getElementById('beverage_unit');
-
     const subcategories = <%= Beverage::SUBCATEGORIES.to_json.html_safe %>;
 
-    // Category Handler
-    categorySelect.addEventListener('change', function() {
-      const selectedCategory = this.value;
-      const customCategoryContainer = document.getElementById('custom-category-container');
-      
-      // Show/hide custom category input
-      customCategoryContainer.style.display = selectedCategory === 'Other' ? 'block' : 'none';
-
-      // Subcategory Handling
-      const categorySubcategories = subcategories[selectedCategory] || [];
-      
-      // Clear existing options
-      subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
-      
-      // Add predefined subcategories
-      categorySubcategories.forEach(function(subcategory) {
-        const option = document.createElement('option');
-        option.value = subcategory;
-        option.textContent = subcategory;
-        subcategorySelect.appendChild(option);
+    if (categorySelect) {
+      categorySelect.addEventListener('change', function() {
+        const selectedCategory = this.value;
+        document.getElementById('custom-category-container').classList.toggle('hidden', selectedCategory !== 'Other');
+        const categorySubcategories = subcategories[selectedCategory] || [];
+        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+        categorySubcategories.forEach(subcategory => {
+          const option = document.createElement('option');
+          option.value = subcategory;
+          option.textContent = subcategory;
+          subcategorySelect.appendChild(option);
+        });
+        const otherOption = document.createElement('option');
+        otherOption.value = 'Other';
+        otherOption.textContent = 'Other';
+        subcategorySelect.appendChild(otherOption);
       });
+    } else {
+      console.error('Category select not found');
+    }
 
-      // Always add 'Other' option
-      const otherOption = document.createElement('option');
-      otherOption.value = 'Other';
-      otherOption.textContent = 'Other';
-      subcategorySelect.appendChild(otherOption);
-    });
+    if (subcategorySelect) {
+      subcategorySelect.addEventListener('change', function() {
+        document.getElementById('custom-subcategory-container').classList.toggle('hidden', this.value !== 'Other');
+      });
+    } else {
+      console.error('Subcategory select not found');
+    }
 
-    // Subcategory Handler
-    subcategorySelect.addEventListener('change', function() {
-      const selectedSubcategory = this.value;
-      const customSubcategoryContainer = document.getElementById('custom-subcategory-container');
-      
-      // Show/hide custom subcategory input
-      customSubcategoryContainer.style.display = selectedSubcategory === 'Other' ? 'block' : 'none';
-    });
+    if (unitSelect) {
+      unitSelect.addEventListener('change', function() {
+        document.getElementById('custom-unit-container').classList.toggle('hidden', this.value !== 'Other');
+      });
+    } else {
+      console.error('Unit select not found');
+    }
 
-    // Unit Handler
-    unitSelect.addEventListener('change', function() {
-      const selectedUnit = this.value;
-      const customUnitContainer = document.getElementById('custom-unit-container');
-      
-      // Show/hide custom unit input
-      customUnitContainer.style.display = selectedUnit === 'Other' ? 'block' : 'none';
-    });
+    // Remove Functionality for Additions and Symptoms
+    function setupRemoveButtons(container) {
+      if (!container) {
+        console.error('Container not found:', container.id);
+        return;
+      }
+      container.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-label')) {
+          const checkbox = document.getElementById(e.target.getAttribute('for'));
+          const entry = e.target.closest('.addition-entry') || e.target.closest('.symptom-entry');
+          if (checkbox && entry) {
+            checkbox.checked = !checkbox.checked;
+            entry.classList.toggle('hidden', checkbox.checked);
+            console.log(`Removed entry: ${checkbox.id}, checked: ${checkbox.checked}`); // Debug
+          } else {
+            console.error('Checkbox or entry not found for', e.target);
+          }
+        }
+      });
+    }
 
-    // Dynamic addition of additions (previous script remains the same)
+    // Dynamic Additions
     const addAdditionButton = document.getElementById('add-addition');
     const additionsContainer = document.getElementById('additions');
-    let additionIndex = 1;
+    let additionIndex = <%= @beverage.additions.size %>;
 
-    addAdditionButton.addEventListener('click', function() {
-      const newAddition = document.createElement('div');
-      newAddition.className = 'flex items-center space-x-2 mb-2';
-      newAddition.innerHTML = `
-        <select name="beverage[additions_attributes][${additionIndex}][name]" 
-                class="w-full p-2 border rounded">
-          <option value="">Select Addition</option>
-          <%= Addition::COMMON_ADDITIONS.map { |a| "<option value='#{a}'>#{a}</option>" }.join.html_safe %>
-        </select>
-        <input type="checkbox" 
-               name="beverage[additions_attributes][${additionIndex}][_destroy]" 
-               class="mr-2" />
-        <label class="text-red-500">Remove</label>
-      `;
-      
-      additionsContainer.appendChild(newAddition);
-      additionIndex++;
-    });
+    if (additionsContainer && addAdditionButton) {
+      setupRemoveButtons(additionsContainer);
+      addAdditionButton.addEventListener('click', function() {
+        const newAddition = document.createElement('div');
+        newAddition.className = 'addition-entry flex items-center space-x-2';
+        newAddition.innerHTML = `
+          <select name="beverage[additions_attributes][${additionIndex}][name]" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select Addition</option>
+            <%= Addition::COMMON_ADDITIONS.map { |a| "<option value='#{a}'>#{a}</option>" }.join.html_safe %>
+          </select>
+          <input type="checkbox" name="beverage[additions_attributes][${additionIndex}][_destroy]" id="remove-addition-${additionIndex}" class="hidden remove-checkbox" />
+          <label for="remove-addition-${additionIndex}" class="text-red-500 cursor-pointer hover:text-red-700 remove-label">Remove</label>
+        `;
+        additionsContainer.appendChild(newAddition);
+        additionIndex++;
+        console.log('Added addition:', additionIndex); // Debug
+      });
+    } else {
+      console.error('Additions elements not found');
+    }
+
+    // Dynamic Symptoms
+    const addSymptomButton = document.getElementById('add-symptom');
+    const symptomsContainer = document.getElementById('symptoms');
+    let symptomIndex = <%= @beverage.symptoms.size %>;
+
+    if (symptomsContainer && addSymptomButton) {
+      setupRemoveButtons(symptomsContainer);
+      addSymptomButton.addEventListener('click', function() {
+        const newSymptom = document.createElement('div');
+        newSymptom.className = 'symptom-entry bg-gray-50 p-4 rounded-md shadow-sm space-y-2';
+        newSymptom.innerHTML = `
+          <div class="flex items-center">
+            <input type="checkbox" name="beverage[symptoms_attributes][${symptomIndex}][occurred]" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+            <label class="ml-2 text-sm text-gray-700">Symptoms Occurred?</label>
+          </div>
+          <select name="beverage[symptoms_attributes][${symptomIndex}][name]" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Select Symptom</option>
+            <%= Symptom::COMMON_SYMPTOMS.map { |s| "<option value='#{s}'>#{s}</option>" }.join.html_safe %>
+          </select>
+          <select name="beverage[symptoms_attributes][${symptomIndex}][severity]" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Severity</option>
+            <option value="Mild">Mild</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Severe">Severe</option>
+          </select>
+          <select name="beverage[symptoms_attributes][${symptomIndex}][timing]" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="">Timing of Symptoms</option>
+            <option value="Immediately">Immediately</option>
+            <option value="Within 20–30 minutes">Within 20–30 minutes</option>
+            <option value="2–5 hours">2–5 hours</option>
+            <option value="5+ hours later">5+ hours later</option>
+          </select>
+          <input type="checkbox" name="beverage[symptoms_attributes][${symptomIndex}][_destroy]" id="remove-symptom-${symptomIndex}" class="hidden remove-checkbox" />
+          <label for="remove-symptom-${symptomIndex}" class="text-red-500 cursor-pointer hover:text-red-700 remove-label">Remove</label>
+        `;
+        symptomsContainer.appendChild(newSymptom);
+        symptomIndex++;
+        console.log('Added symptom:', symptomIndex); // Debug
+      });
+    } else {
+      console.error('Symptoms elements not found');
+    }
   });
-</script>
+<% end %>
