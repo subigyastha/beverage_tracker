@@ -14,8 +14,13 @@ module BeverageTracker
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks])
-    config.action_view.sanitized_allowed_methods = ['link_to']
+    config.eager_load_paths -= Dir[Rails.root.join('lib', 'assets', '**/')]
+    config.eager_load_paths -= Dir[Rails.root.join('lib', 'tasks', '**/')]
+
+
+    config.action_view.sanitized_allowed_tags = ['strong', 'em', 'p', 'ul', 'li']
+    config.action_view.sanitized_allowed_protocols = ['http', 'https']
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
