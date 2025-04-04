@@ -18,9 +18,7 @@ module BeverageTracker
     config.eager_load_paths -= Dir[Rails.root.join('lib', 'tasks', '**/')]
 
 
-    config.action_view.sanitized_allowed_tags = ['strong', 'em', 'p', 'ul', 'li']
-    config.action_view.sanitized_allowed_protocols = ['http', 'https']
-
+    # Will use your configured sanitizer
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
